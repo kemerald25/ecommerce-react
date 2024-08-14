@@ -25,7 +25,7 @@ const Basket = () => {
     if (didMount && firebase.auth.currentUser && basket.length !== 0) {
       firebase.saveBasketItems(basket, firebase.auth.currentUser.uid)
         .then(() => {
-          console.log('Item saved to basket');
+          console.log('Item saved to cart');
         })
         .catch((e) => {
           console.log(e);
@@ -84,7 +84,7 @@ const Basket = () => {
         <div className="basket-list">
           <div className="basket-header">
             <h3 className="basket-header-title">
-              My Basket &nbsp;
+              My Cart &nbsp;
               <span>
                 (
                 {` ${basket.length} ${basket.length > 1 ? 'items' : 'item'}`}
@@ -108,12 +108,12 @@ const Basket = () => {
               onClick={onClearBasket}
               type="button"
             >
-              <span>Clear Basket</span>
+              <span>Clear Cart</span>
             </button>
           </div>
           {basket.length <= 0 && (
             <div className="basket-empty">
-              <h5 className="basket-empty-msg">Your basket is empty</h5>
+              <h5 className="basket-empty-msg">Your cart is empty</h5>
             </div>
           )}
           {basket.map((product, i) => (

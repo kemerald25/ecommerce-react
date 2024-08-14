@@ -85,6 +85,16 @@
     background: $border-color;
   }
 }
+.button-border-red {
+  border: 1px solid red;
+  color: red;
+
+  &:hover {
+    border: 1px solid $border-color;
+    background: red;
+    color: #fff;
+  }
+}
 
 .button-small {
   font-size: $font-small;

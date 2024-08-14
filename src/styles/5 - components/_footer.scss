@@ -36,9 +36,9 @@
 }
 
 .footer-col-2 {
-  padding: 3rem 0;
+  padding: 2rem;
   text-align: center;
-  flex-basis: 20%;
+  flex-basis: none;
 
   @include mobile {
     flex-basis: none;

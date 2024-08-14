@@ -108,13 +108,13 @@ const ViewProduct = () => {
               <div className="divider" />
               <br />
               <div>
-                <span className="text-subtle">Lens Width and Frame Size</span>
+                <span className="text-subtle">Laptop Size</span>
                 <br />
                 <br />
                 <Select
                   placeholder="--Select Size--"
                   onChange={onSelectedSizeChange}
-                  options={product.sizes.sort((a, b) => (a < b ? -1 : 1)).map((size) => ({ label: `${size} mm`, value: size }))}
+                  options={product.sizes.sort((a, b) => (a < b ? -1 : 1)).map((size) => ({ label: `${size} inch`, value: size }))}
                   styles={{ menu: (provided) => ({ ...provided, zIndex: 10 }) }}
                 />
               </div>
@@ -137,7 +137,7 @@ const ViewProduct = () => {
                   onClick={handleAddToBasket}
                   type="button"
                 >
-                  {isItemOnBasket(product.id) ? 'Remove From Basket' : 'Add To Basket'}
+                  {isItemOnBasket(product.id) ? 'Remove From Cart' : 'Add To Cart'}
                 </button>
               </div>
             </div>

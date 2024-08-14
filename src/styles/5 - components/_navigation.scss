@@ -17,29 +17,39 @@
     padding: .5rem 2rem;
   }
 
-  @include mobile {
-    padding: 0 $s-size;
+  &.navigation-mobile {
+    padding: $s-size;
     position: fixed;
+    height: 6rem;
+    justify-content: space-between;
   }
 
   .logo {
     height: inherit;
     margin-right: 2rem;
-  }
 
-  .logo img {
-    width: 15rem;
-    height: inherit;
-    object-fit: contain;
-  }
+    img {
+      width: 15rem;
+      height: inherit;
+      object-fit: contain;
 
-  .logo a {
-    display: block;
-    height: 100%;
+      @include mobile {
+        width: 8rem;
+      }
+    }
+
+    a {
+      display: block;
+      height: 100%;
+    }
   }
 
   .searchbar {
     width: 300px;
+
+    .navigation-mobile & {
+      width: 100%;
+    }
   }
 }
 
@@ -68,13 +78,12 @@
 
   li {
     display: inline-block;
-    
-    
+
     a {
       padding: 10px 15px;
       font-size: 1.4rem;
       opacity: .5;
-      
+
       &:hover {
         background: $background-color-01;
       }
@@ -113,4 +122,73 @@
 .navigation-menu-active {
   font-weight: bold;
   opacity: 1 !important;
+}
+
+.navigation-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+
+  .navigation-mobile & {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+}
+
+.navigation-menu-mobile {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: $background-color;
+  padding: $m-size;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, .05);
+
+  .navigation-mobile & {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .navigation-menu-main-mobile {
+    list-style: none;
+    padding: 0;
+    margin: $m-size 0;
+
+    li {
+      margin-bottom: $s-size;
+
+      a {
+        display: block;
+        padding: $xs-size 0;
+        font-size: 1.4rem;
+        color: $heading-color;
+        text-decoration: none;
+
+        &:hover {
+          background: $background-color-01;
+        }
+      }
+    }
+  }
+
+  .navigation-action-mobile {
+    margin-top: $m-size;
+    display: flex;
+    flex-direction: column;
+
+    .button {
+      margin-bottom: $s-size;
+    }
+  }
 }

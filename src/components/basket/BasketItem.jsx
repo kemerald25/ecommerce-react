@@ -39,7 +39,7 @@ const BasketItem = ({ product }) => {
               <h5 className="my-0">
                 {product.selectedSize}
                 {' '}
-                mm
+                inch
               </h5>
             </div>
             <div>
@@ -54,16 +54,25 @@ const BasketItem = ({ product }) => {
             </div>
           </div>
         </div>
-        <div className="basket-item-price">
-          <h4 className="my-0">{displayMoney(product.price * product.quantity)}</h4>
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          flexWrap: "wrap",
+          justifyContent: "right",
+          paddingRight: "3px",
+          gap: "2px"
+        }}>
+          <div className="basket-item-price">
+            <h4 className="my-0">{displayMoney(product.price * product.quantity)}</h4>
+          </div>
+          <button
+            className="basket-item-remove button button-border button-border-red button-small"
+            onClick={onRemoveFromBasket}
+            type="button"
+          >
+            <CloseOutlined />
+          </button>
         </div>
-        <button
-          className="basket-item-remove button button-border button-border-gray button-small"
-          onClick={onRemoveFromBasket}
-          type="button"
-        >
-          <CloseOutlined />
-        </button>
       </div>
     </div>
   );

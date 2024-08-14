@@ -1,22 +1,43 @@
-/* eslint-disable indent */
-import { FilterOutlined, ShoppingOutlined } from '@ant-design/icons';
+import React, { useState, useEffect, useRef } from 'react';
+import { FilterOutlined, ShoppingOutlined, MenuOutlined } from '@ant-design/icons';
 import * as ROUTE from '@/constants/routes';
-import logo from '@/images/logo-full.png';
-import React, { useEffect, useRef } from 'react';
+import logo from '@/images/logo.png';
 import { useSelector } from 'react-redux';
-import {
-  Link, NavLink, useLocation
-} from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import UserAvatar from '@/views/account/components/UserAvatar';
 import BasketToggle from '../basket/BasketToggle';
 import Badge from './Badge';
 import FiltersToggle from './FiltersToggle';
-import MobileNavigation from './MobileNavigation';
 import SearchBar from './SearchBar';
+
+// Custom hook to track window size
+const useWindowSize = () => {
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return windowSize;
+}
 
 const Navigation = () => {
   const navbar = useRef(null);
   const { pathname } = useLocation();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { width } = useWindowSize();
+  const isMobile = width <= 800;
 
   const store = useSelector((state) => ({
     basketLength: state.basket.length,
@@ -26,7 +47,7 @@ const Navigation = () => {
   }));
 
   const scrollHandler = () => {
-    if (navbar.current && window.screen.width > 480) {
+    if (navbar.current && !isMobile) {
       if (window.pageYOffset >= 70) {
         navbar.current.classList.add('is-nav-scrolled');
       } else {
@@ -38,13 +59,13 @@ const Navigation = () => {
   useEffect(() => {
     window.addEventListener('scroll', scrollHandler);
     return () => window.removeEventListener('scroll', scrollHandler);
-  }, []);
+  }, [isMobile]);
 
   const onClickLink = (e) => {
     if (store.isAuthenticating) e.preventDefault();
+    setIsMenuOpen(false);
   };
 
-  // disable the basket toggle to these pathnames
   const basketDisabledpathnames = [
     ROUTE.CHECKOUT_STEP_1,
     ROUTE.CHECKOUT_STEP_2,
@@ -56,21 +77,10 @@ const Navigation = () => {
 
   if (store.user && store.user.role === 'ADMIN') {
     return null;
-  } if (window.screen.width <= 800) {
-    return (
-      <MobileNavigation
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...store}
-        disabledPaths={basketDisabledpathnames}
-        pathname={pathname}
-      />
-    );
   }
-  return (
-    <nav className="navigation" ref={navbar}>
-      <div className="logo">
-        <Link onClick={onClickLink} to="/"><h2>LapHassle</h2></Link>
-      </div>
+
+  const renderDesktopNav = () => (
+    <>
       <ul className="navigation-menu-main">
         <li><NavLink activeClassName="navigation-menu-active" exact to={ROUTE.HOME}>Home</NavLink></li>
         <li><NavLink activeClassName="navigation-menu-active" to={ROUTE.SHOP}>Shop</NavLink></li>
@@ -96,7 +106,6 @@ const Navigation = () => {
                 onClick={onClickToggle}
                 type="button"
               >
-
                 <Badge count={store.basketLength}>
                   <ShoppingOutlined style={{ fontSize: '2.4rem' }} />
                 </Badge>
@@ -131,6 +140,86 @@ const Navigation = () => {
           </li>
         )}
       </ul>
+    </>
+  );
+
+  const renderMobileNav = () => (
+    <>
+      <button
+        className="navigation-menu-btn"
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        type="button"
+      >
+        <MenuOutlined style={{ fontSize: '2.4rem' }} />
+      </button>
+      {isMenuOpen && (
+        <div className="navigation-menu-mobile">
+          <SearchBar />
+          <ul className="navigation-menu-main-mobile">
+            <li><NavLink activeClassName="navigation-menu-active" exact to={ROUTE.HOME} onClick={onClickLink}>Home</NavLink></li>
+            <li><NavLink activeClassName="navigation-menu-active" to={ROUTE.SHOP} onClick={onClickLink}>Shop</NavLink></li>
+            <li><NavLink activeClassName="navigation-menu-active" to={ROUTE.FEATURED_PRODUCTS} onClick={onClickLink}>Featured</NavLink></li>
+            <li><NavLink activeClassName="navigation-menu-active" to={ROUTE.RECOMMENDED_PRODUCTS} onClick={onClickLink}>Recommended</NavLink></li>
+          </ul>
+          {(pathname === ROUTE.SHOP || pathname === ROUTE.SEARCH) && (
+            <FiltersToggle>
+              <button className="button-muted button-small" type="button">
+                Filters &nbsp;
+                <FilterOutlined />
+              </button>
+            </FiltersToggle>
+          )}
+          <BasketToggle>
+            {({ onClickToggle }) => (
+              <button
+                className="button-link navigation-menu-link basket-toggle"
+                disabled={basketDisabledpathnames.includes(pathname)}
+                onClick={onClickToggle}
+                type="button"
+              >
+                <Badge count={store.basketLength}>
+                  <ShoppingOutlined style={{ fontSize: '2.4rem' }} />
+                </Badge>
+              </button>
+            )}
+          </BasketToggle>
+          {store.user ? (
+            <div className="navigation-menu-item">
+              <UserAvatar />
+            </div>
+          ) : (
+            <div className="navigation-action-mobile">
+              {pathname !== ROUTE.SIGNUP && (
+                <Link
+                  className="button button-small"
+                  onClick={onClickLink}
+                  to={ROUTE.SIGNUP}
+                >
+                  Sign Up
+                </Link>
+              )}
+              {pathname !== ROUTE.SIGNIN && (
+                <Link
+                  className="button button-small button-muted margin-left-s"
+                  onClick={onClickLink}
+                  to={ROUTE.SIGNIN}
+                >
+                  Sign In
+                </Link>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+    </>
+  );
+
+  return (
+    <nav className={`navigation ${isMobile ? 'navigation-mobile' : ''}`} ref={navbar}>
+      <div className="logo">
+        <Link onClick={onClickLink} to="/"><img alt="Logo" src={logo} /></Link>
+      </div>
+      {isMobile ? renderMobileNav() : renderDesktopNav()}
     </nav>
   );
 };

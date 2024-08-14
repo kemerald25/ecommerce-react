@@ -47,6 +47,10 @@
 
   display: grid;
   grid-template-columns: 100px 1fr 80px 40px;
+
+  @include mobile {
+    display: flex;
+  }
 }
 
 .basket-item-specs {
@@ -91,6 +95,9 @@
   height: 90px;
   margin-right: $m-size;
   position: relative;
+  @include mobile {
+    display: none;
+}
 }
 
 .basket-item-img {
@@ -104,7 +111,7 @@
 }
 
 .basket-item-price {
-  margin-right: 2rem;
+  // margin-right: 2rem;
 }
 
 .basket-item-name {
@@ -112,7 +119,7 @@
   width: 142px;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis; 
+  text-overflow: ellipsis;
   position: relative;
 }
 
@@ -148,7 +155,7 @@
 
 .basket-checkout-button {
   font-size: $font-medium;
-  padding: $m-size $l-size;
+  // padding: $m-size $l-size;
   text-transform: uppercase;
 }
 

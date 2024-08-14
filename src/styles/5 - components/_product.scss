@@ -41,6 +41,7 @@
 .product-list-wrapper {
   flex-grow: 1;
   position: relative;
+  margin-top: 5rem;
 
   @include mobile {
     margin-top: 5rem;
