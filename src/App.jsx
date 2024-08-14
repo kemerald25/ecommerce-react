@@ -5,6 +5,7 @@ import React, { StrictMode } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import AppRouter from '@/routers/AppRouter';
+import { Analytics } from "@vercel/analytics/react";
 
 const App = ({ store, persistor }) => (
   <StrictMode>
