@@ -34,13 +34,34 @@ const Basket = () => {
   }, [basket.length]);
 
   const onCheckOut = () => {
-    if ((basket.length !== 0 && user)) {
-      document.body.classList.remove('is-basket-open');
-      history.push(CHECKOUT_STEP_1);
+    if (basket.length !== 0 && user) {
+      const basketDetails = basket.map((item) => {
+        return `Item: ${item.name}, Quantity: ${item.quantity}, Price: ${displayMoney(item.price)}\n`;
+      }).join('');
+  
+      const totalAmount = displayMoney(calculateTotal(basket.map((product) => product.price * product.quantity)));
+      
+      const message = `
+        Checkout Details:
+        \nUser: ${user.email}
+        \nItems:\n${basketDetails}
+        \nTotal Amount: ${totalAmount}
+      `;
+  
+      // Replace YOUR_PHONE_NUMBER with the recipient's phone number in international format, e.g., 1234567890
+      const whatsappUrl = `https://wa.me/2349076948648?text=${encodeURIComponent(message)}`;
+  
+      // Open WhatsApp with the pre-filled message
+      window.open(whatsappUrl, '_blank');
+  
+      // Optionally clear the basket or perform other actions
+      dispatch(clearBasket());
+      onOpenModal();
     } else {
       onOpenModal();
     }
   };
+  
 
   const onSignInClick = () => {
     onCloseModal();

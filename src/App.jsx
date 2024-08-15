@@ -11,6 +11,7 @@ const App = ({ store, persistor }) => (
   <StrictMode>
     <Provider store={store}>
       <PersistGate loading={<Preloader />} persistor={persistor}>
+        <Analytics />
         <AppRouter />
       </PersistGate>
     </Provider>
